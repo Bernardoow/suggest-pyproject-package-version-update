@@ -36,7 +36,7 @@ const SuggestPyProjectPackageVersionUpdate = () => {
               ...pyProjectFileToml.tool.poetry["dev-dependencies"],
             };
             if (k in packages) {
-              return accumulator.concat(k, ">=", v, "\n");
+              return accumulator.concat(k, " = ",  "\">=", v, "\"\n");
             }
             return accumulator;
           }, "")
