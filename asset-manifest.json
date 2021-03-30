@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/suggest-pyproject-package-version-update/static/css/main.9d5b29c0.chunk.css",
-    "main.js": "/suggest-pyproject-package-version-update/static/js/main.2c3f43b7.chunk.js",
-    "main.js.map": "/suggest-pyproject-package-version-update/static/js/main.2c3f43b7.chunk.js.map",
+    "main.js": "/suggest-pyproject-package-version-update/static/js/main.d992e83f.chunk.js",
+    "main.js.map": "/suggest-pyproject-package-version-update/static/js/main.d992e83f.chunk.js.map",
     "runtime-main.js": "/suggest-pyproject-package-version-update/static/js/runtime-main.14acb31a.js",
     "runtime-main.js.map": "/suggest-pyproject-package-version-update/static/js/runtime-main.14acb31a.js.map",
     "static/js/2.75c4d478.chunk.js": "/suggest-pyproject-package-version-update/static/js/2.75c4d478.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.14acb31a.js",
     "static/js/2.75c4d478.chunk.js",
     "static/css/main.9d5b29c0.chunk.css",
-    "static/js/main.2c3f43b7.chunk.js"
+    "static/js/main.d992e83f.chunk.js"
   ]
 }
