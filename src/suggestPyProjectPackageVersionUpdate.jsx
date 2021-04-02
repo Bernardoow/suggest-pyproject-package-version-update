@@ -17,29 +17,33 @@ const SuggestPyProjectPackageVersionUpdate = () => {
   }
 
   const [pinedVersions, SetPinedVersions] = useState("");
+  const [pinedDevVersions, SetPinedDevVersions] = useState("");
 
   useEffect(() => {
+    function producePinnedVersions(dependencies) {
+      return versions
+        .split("\n")
+        .filter((value) => !!value)
+        .map((value) => {
+          return value.replaceAll(/\s+/g, " ").split(" ").slice(0, 2);
+        })
+        .reduce((accumulator, currentValue) => {
+          const [k, v] = currentValue;
+          if (k in dependencies) {
+            return accumulator.concat(k, ">=", v, "\n");
+          }
+          return accumulator;
+        }, "");
+    }
+
     try {
       const pyProjectFileToml = toml.parse(pyProjectFile);
       SetIsPyProjectFileWithProblem(false);
       SetPinedVersions(
-        versions
-          .split("\n")
-          .filter((value) => !!value)
-          .map((value) => {
-            return value.replaceAll(/\s+/g, " ").split(" ").slice(0, 2);
-          })
-          .reduce((accumulator, currentValue) => {
-            const [k, v] = currentValue;
-            const packages = {
-              ...pyProjectFileToml.tool.poetry["dependencies"],
-              ...pyProjectFileToml.tool.poetry["dev-dependencies"],
-            };
-            if (k in packages) {
-              return accumulator.concat(k, ">=", v, "\n");
-            }
-            return accumulator;
-          }, "")
+        producePinnedVersions(pyProjectFileToml.tool.poetry["dependencies"])
+      );
+      SetPinedDevVersions(
+        producePinnedVersions(pyProjectFileToml.tool.poetry["dev-dependencies"])
       );
     } catch (e) {
       SetIsPyProjectFileWithProblem(true);
@@ -87,14 +91,24 @@ const SuggestPyProjectPackageVersionUpdate = () => {
       <div className="col">
         <div class="mb-3">
           <label for="result" class="form-label">
-            result
+            Dependencies
           </label>
           <textarea
             className="form-control"
-            id="result"
+            id="dependencies"
             value={pinedVersions}
             readOnly
-            rows="20"
+            rows="15"
+          ></textarea>
+          <label for="result" class="form-label">
+            Dev-dependencies
+          </label>
+          <textarea
+            className="form-control"
+            id="dev-dependencies"
+            value={pinedDevVersions}
+            readOnly
+            rows="15"
           ></textarea>
         </div>
       </div>
