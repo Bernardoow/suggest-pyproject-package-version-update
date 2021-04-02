@@ -30,7 +30,7 @@ const SuggestPyProjectPackageVersionUpdate = () => {
         .reduce((accumulator, currentValue) => {
           const [k, v] = currentValue;
           if (k in dependencies) {
-            return accumulator.concat(k, ">=", v, "\n");
+            return accumulator.concat(k, " = ", '">=', v, '"\n');
           }
           return accumulator;
         }, "");
