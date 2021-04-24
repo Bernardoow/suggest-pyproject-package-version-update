@@ -10,6 +10,7 @@ python = "^3.8"
 requests = "^2.24.0"
 
 [tool.poetry.dev-dependencies]
+requests = "^2.24.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import toml from "toml";
+import toml from "@iarna/toml";
 import { pyProjectData, versionsData } from "./exampleData";
 
 const SuggestPyProjectPackageVersionUpdate = () => {
   const [pyProjectFile, SetPyProjectFile] = useState(pyProjectData);
+  const [newPyProjectFile, SetNewPyProjectFile] = useState(pyProjectData);
   const [isPyProjectFileWithProblem, SetIsPyProjectFileWithProblem] = useState(
     false
   );
@@ -16,12 +17,9 @@ const SuggestPyProjectPackageVersionUpdate = () => {
     SetVersions(event.target.value);
   }
 
-  const [pinedVersions, SetPinedVersions] = useState("");
-  const [pinedDevVersions, SetPinedDevVersions] = useState("");
-
   useEffect(() => {
-    function producePinnedVersions(dependencies) {
-      return versions
+    function producePinnedVersions(pyProjectFileToml) {
+      const newPyProjectFile = versions
         .split("\n")
         .filter((value) => !!value)
         .map((value) => {
@@ -29,21 +27,26 @@ const SuggestPyProjectPackageVersionUpdate = () => {
         })
         .reduce((accumulator, currentValue) => {
           const [k, v] = currentValue;
-          if (k in dependencies) {
-            return accumulator.concat(k, " = ", '">=', v, '"\n');
-          }
+
+          ["dependencies", "dev-dependencies"].forEach((section) => {
+            if (k in accumulator.tool.poetry[section]) {
+              accumulator.tool.poetry[section][k] = `>=${v}`;
+            }
+          });
           return accumulator;
-        }, "");
+        }, pyProjectFileToml);
+
+      return toml.stringify(newPyProjectFile).replaceAll("  ", "");
     }
 
     try {
       const pyProjectFileToml = toml.parse(pyProjectFile);
       SetIsPyProjectFileWithProblem(false);
-      SetPinedVersions(
-        producePinnedVersions(pyProjectFileToml.tool.poetry["dependencies"])
-      );
-      SetPinedDevVersions(
-        producePinnedVersions(pyProjectFileToml.tool.poetry["dev-dependencies"])
+      SetNewPyProjectFile(
+        producePinnedVersions(
+          pyProjectFileToml.tool.poetry["dependencies"],
+          pyProjectFileToml
+        )
       );
     } catch (e) {
       SetIsPyProjectFileWithProblem(true);
@@ -61,8 +64,8 @@ const SuggestPyProjectPackageVersionUpdate = () => {
           ""
         )}
 
-        <div class="mb-3">
-          <label for="pyProjectToml" class="form-label">
+        <div className="mb-3">
+          <label for="pyProjectToml" className="form-label">
             PyProject.toml
           </label>
           <textarea
@@ -75,8 +78,8 @@ const SuggestPyProjectPackageVersionUpdate = () => {
         </div>
       </div>
       <div className="col">
-        <div class="mb-3">
-          <label for="poetryShow" class="form-label">
+        <div className="mb-3">
+          <label for="poetryShow" className="form-label">
             poetry show
           </label>
           <textarea
@@ -89,26 +92,16 @@ const SuggestPyProjectPackageVersionUpdate = () => {
         </div>
       </div>
       <div className="col">
-        <div class="mb-3">
-          <label for="result" class="form-label">
-            Dependencies
+        <div className="mb-3">
+          <label for="result" className="form-label">
+            New PyProject.toml
           </label>
           <textarea
             className="form-control"
             id="dependencies"
-            value={pinedVersions}
+            value={newPyProjectFile}
             readOnly
-            rows="15"
-          ></textarea>
-          <label for="result" class="form-label">
-            Dev-dependencies
-          </label>
-          <textarea
-            className="form-control"
-            id="dev-dependencies"
-            value={pinedDevVersions}
-            readOnly
-            rows="15"
+            rows="30"
           ></textarea>
         </div>
       </div>
