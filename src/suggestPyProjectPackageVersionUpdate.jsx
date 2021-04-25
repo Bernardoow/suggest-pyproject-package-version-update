@@ -42,13 +42,8 @@ const SuggestPyProjectPackageVersionUpdate = () => {
     try {
       const pyProjectFileToml = toml.parse(pyProjectFile);
       SetIsPyProjectFileWithProblem(false);
-      SetNewPyProjectFile(
-        producePinnedVersions(
-          pyProjectFileToml.tool.poetry["dependencies"],
-          pyProjectFileToml
-        )
-      );
-    } catch (e) {
+      SetNewPyProjectFile(producePinnedVersions(pyProjectFileToml));
+    } catch (_) {
       SetIsPyProjectFileWithProblem(true);
     }
   }, [pyProjectFile, versions]);
@@ -65,7 +60,7 @@ const SuggestPyProjectPackageVersionUpdate = () => {
         )}
 
         <div className="mb-3">
-          <label for="pyProjectToml" className="form-label">
+          <label htmlFor="pyProjectToml" className="form-label">
             PyProject.toml
           </label>
           <textarea
@@ -79,7 +74,7 @@ const SuggestPyProjectPackageVersionUpdate = () => {
       </div>
       <div className="col">
         <div className="mb-3">
-          <label for="poetryShow" className="form-label">
+          <label htmlFor="poetryShow" className="form-label">
             poetry show
           </label>
           <textarea
@@ -93,7 +88,7 @@ const SuggestPyProjectPackageVersionUpdate = () => {
       </div>
       <div className="col">
         <div className="mb-3">
-          <label for="result" className="form-label">
+          <label htmlFor="result" className="form-label">
             New PyProject.toml
           </label>
           <textarea
