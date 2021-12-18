@@ -1,6 +1,6 @@
 {
   "name": "suggest-pyproject-package-version-update",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "homepage": "https://bernardoow.github.io/suggest-pyproject-package-version-update/",
   "dependencies": {
@@ -40,6 +40,7 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^3.1.0"
+    "gh-pages": "^3.1.0",
+    "jest-each": "^26.6.2"
   }
 }
