@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import toml from "@iarna/toml";
 import { pyProjectData, versionsData } from "./exampleData";
+import { canUpdateDependency } from "./businessRules";
 
 const SuggestPyProjectPackageVersionUpdate = () => {
   const [pyProjectFile, SetPyProjectFile] = useState(pyProjectData);
   const [newPyProjectFile, SetNewPyProjectFile] = useState(pyProjectData);
-  const [isPyProjectFileWithProblem, SetIsPyProjectFileWithProblem] = useState(
-    false
-  );
+  const [isPyProjectFileWithProblem, SetIsPyProjectFileWithProblem] =
+    useState(false);
   const [versions, SetVersions] = useState(versionsData);
 
   function pyProjectFileHandleChange(event) {
@@ -29,7 +29,10 @@ const SuggestPyProjectPackageVersionUpdate = () => {
           const [k, v] = currentValue;
 
           ["dependencies", "dev-dependencies"].forEach((section) => {
-            if (k in accumulator.tool.poetry[section]) {
+            if (
+              k in accumulator.tool.poetry[section] &&
+              canUpdateDependency(accumulator.tool.poetry[section][k])
+            ) {
               accumulator.tool.poetry[section][k] = `>=${v}`;
             }
           });
