@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/suggest-pyproject-package-version-update/static/css/main.9d5b29c0.chunk.css",
-    "main.js": "/suggest-pyproject-package-version-update/static/js/main.620bd1a2.chunk.js",
-    "main.js.map": "/suggest-pyproject-package-version-update/static/js/main.620bd1a2.chunk.js.map",
+    "main.css": "/suggest-pyproject-package-version-update/static/css/main.a617e044.chunk.css",
+    "main.js": "/suggest-pyproject-package-version-update/static/js/main.a5427346.chunk.js",
+    "main.js.map": "/suggest-pyproject-package-version-update/static/js/main.a5427346.chunk.js.map",
     "runtime-main.js": "/suggest-pyproject-package-version-update/static/js/runtime-main.d6f97c06.js",
     "runtime-main.js.map": "/suggest-pyproject-package-version-update/static/js/runtime-main.d6f97c06.js.map",
-    "static/js/2.c3538423.chunk.js": "/suggest-pyproject-package-version-update/static/js/2.c3538423.chunk.js",
-    "static/js/2.c3538423.chunk.js.map": "/suggest-pyproject-package-version-update/static/js/2.c3538423.chunk.js.map",
+    "static/js/2.0bfc785d.chunk.js": "/suggest-pyproject-package-version-update/static/js/2.0bfc785d.chunk.js",
+    "static/js/2.0bfc785d.chunk.js.map": "/suggest-pyproject-package-version-update/static/js/2.0bfc785d.chunk.js.map",
     "static/js/3.047b3ba0.chunk.js": "/suggest-pyproject-package-version-update/static/js/3.047b3ba0.chunk.js",
     "static/js/3.047b3ba0.chunk.js.map": "/suggest-pyproject-package-version-update/static/js/3.047b3ba0.chunk.js.map",
     "index.html": "/suggest-pyproject-package-version-update/index.html",
-    "static/css/main.9d5b29c0.chunk.css.map": "/suggest-pyproject-package-version-update/static/css/main.9d5b29c0.chunk.css.map",
-    "static/js/2.c3538423.chunk.js.LICENSE.txt": "/suggest-pyproject-package-version-update/static/js/2.c3538423.chunk.js.LICENSE.txt"
+    "static/css/main.a617e044.chunk.css.map": "/suggest-pyproject-package-version-update/static/css/main.a617e044.chunk.css.map",
+    "static/js/2.0bfc785d.chunk.js.LICENSE.txt": "/suggest-pyproject-package-version-update/static/js/2.0bfc785d.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.d6f97c06.js",
-    "static/js/2.c3538423.chunk.js",
-    "static/css/main.9d5b29c0.chunk.css",
-    "static/js/main.620bd1a2.chunk.js"
+    "static/js/2.0bfc785d.chunk.js",
+    "static/css/main.a617e044.chunk.css",
+    "static/js/main.a5427346.chunk.js"
   ]
 }
