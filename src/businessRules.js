@@ -38,3 +38,9 @@ export function splitTextLinesIntoList(versions) {
 export function removeEmptyString(stringList) {
   return stringList.filter((value) => !!value);
 }
+
+export function getNameAndVersionOfEachDependency(stringList) {
+  return stringList.map((value) => {
+    return value.replace(/\s+/g, " ").split(" ").slice(0, 2);
+  });
+}

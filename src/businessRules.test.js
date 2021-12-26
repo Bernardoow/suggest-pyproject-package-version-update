@@ -2,6 +2,7 @@ import {
   canChangeDependencySpecification,
   canUpdateDependency,
   discoveryDependencySpecification,
+  getNameAndVersionOfEachDependency,
   removeEmptyString,
   splitTextLinesIntoList,
 } from "./businessRules";
@@ -82,5 +83,28 @@ describe("removeEmptyString Tests", () => {
   });
   test("Empty Data", () => {
     expect(removeEmptyString([""])).toStrictEqual([]);
+  });
+});
+
+describe("getNameAndVersionOfEachDependency Tests", () => {
+  test("List valid", () => {
+    expect(
+      getNameAndVersionOfEachDependency([
+        "certifi  2020.12.5 Python package for providing Mozilla's CA Bundle.",
+        "chardet  3.0.4     Universal encoding detector for Python 2 and 3",
+        "idna  2.10      Internationalized Domain Names in Applications (IDNA)",
+        "requests 2.25.1    Python HTTP for Humans.",
+        "urllib3  1.25.11   HTTP library with thread-safe connection pooling, file post, and more.",
+      ])
+    ).toStrictEqual([
+      ["certifi", "2020.12.5"],
+      ["chardet", "3.0.4"],
+      ["idna", "2.10"],
+      ["requests", "2.25.1"],
+      ["urllib3", "1.25.11"],
+    ]);
+  });
+  test("List empty", () => {
+    expect(getNameAndVersionOfEachDependency([])).toStrictEqual([]);
   });
 });
