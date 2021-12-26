@@ -30,3 +30,7 @@ export function canUpdateDependency(dependency) {
   const dependencies = discoveryDependencySpecification(dependency);
   return canChangeDependencySpecification(dependencies);
 }
+
+export function splitTextLinesIntoList(versions) {
+  return versions.split("\n");
+}

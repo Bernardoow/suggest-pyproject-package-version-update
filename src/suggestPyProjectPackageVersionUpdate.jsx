@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import toml from "@iarna/toml";
 import { pyProjectData, versionsData } from "./exampleData";
-import { canUpdateDependency } from "./businessRules";
+import { canUpdateDependency, splitTextLinesIntoList } from "./businessRules";
 
 const SuggestPyProjectPackageVersionUpdate = () => {
   const [pyProjectFile, SetPyProjectFile] = useState(pyProjectData);
@@ -19,8 +19,7 @@ const SuggestPyProjectPackageVersionUpdate = () => {
 
   useEffect(() => {
     function producePinnedVersions(pyProjectFileToml) {
-      const newPyProjectFile = versions
-        .split("\n")
+      const newPyProjectFile = splitTextLinesIntoList(versions)
         .filter((value) => !!value)
         .map((value) => {
           return value.replaceAll(/\s+/g, " ").split(" ").slice(0, 2);
