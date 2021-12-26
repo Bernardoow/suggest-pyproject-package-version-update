@@ -2,6 +2,7 @@ import {
   canChangeDependencySpecification,
   canUpdateDependency,
   discoveryDependencySpecification,
+  removeEmptyString,
   splitTextLinesIntoList,
 } from "./businessRules";
 
@@ -59,17 +60,27 @@ describe("canUpdate Tests", () => {
 describe("splitTextLinesIntoList Tests", () => {
   test("Valid Data", () => {
     expect(splitTextLinesIntoList(versionsData)).toStrictEqual([
-      "",
       "certifi  2020.12.5 Python package for providing Mozilla's CA Bundle.",
       "chardet  3.0.4     Universal encoding detector for Python 2 and 3",
       "idna  2.10      Internationalized Domain Names in Applications (IDNA)",
       "requests 2.25.1    Python HTTP for Humans.",
       "urllib3  1.25.11   HTTP library with thread-safe connection pooling, file post, and more.",
-      "",
     ]);
   });
 
   test("Empty Data", () => {
-    expect(splitTextLinesIntoList("")).toStrictEqual([""]);
+    expect(splitTextLinesIntoList("")).toStrictEqual([]);
+  });
+});
+
+describe("removeEmptyString Tests", () => {
+  test("List without entry with value and empty string", () => {
+    expect(removeEmptyString(["1", "", "2"])).toStrictEqual(["1", "2"]);
+  });
+  test("List without entry with value and without empty string", () => {
+    expect(removeEmptyString(["1", "2"])).toStrictEqual(["1", "2"]);
+  });
+  test("Empty Data", () => {
+    expect(removeEmptyString([""])).toStrictEqual([]);
   });
 });
