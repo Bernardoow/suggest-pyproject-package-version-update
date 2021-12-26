@@ -20,7 +20,6 @@ const SuggestPyProjectPackageVersionUpdate = () => {
   useEffect(() => {
     function producePinnedVersions(pyProjectFileToml) {
       const newPyProjectFile = splitTextLinesIntoList(versions)
-        .filter((value) => !!value)
         .map((value) => {
           return value.replaceAll(/\s+/g, " ").split(" ").slice(0, 2);
         })

@@ -32,5 +32,9 @@ export function canUpdateDependency(dependency) {
 }
 
 export function splitTextLinesIntoList(versions) {
-  return versions.split("\n");
+  return removeEmptyString(versions.split("\n"));
+}
+
+export function removeEmptyString(stringList) {
+  return stringList.filter((value) => !!value);
 }
