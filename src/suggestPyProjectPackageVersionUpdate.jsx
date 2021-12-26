@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import toml from "@iarna/toml";
 import { pyProjectData, versionsData } from "./exampleData";
-import { canUpdateDependency, splitTextLinesIntoList } from "./businessRules";
+import {
+  canUpdateDependency,
+  getNameAndVersionOfEachDependency,
+  splitTextLinesIntoList,
+} from "./businessRules";
 
 const SuggestPyProjectPackageVersionUpdate = () => {
   const [pyProjectFile, SetPyProjectFile] = useState(pyProjectData);
@@ -19,23 +23,21 @@ const SuggestPyProjectPackageVersionUpdate = () => {
 
   useEffect(() => {
     function producePinnedVersions(pyProjectFileToml) {
-      const newPyProjectFile = splitTextLinesIntoList(versions)
-        .map((value) => {
-          return value.replaceAll(/\s+/g, " ").split(" ").slice(0, 2);
-        })
-        .reduce((accumulator, currentValue) => {
-          const [k, v] = currentValue;
+      const newPyProjectFile = getNameAndVersionOfEachDependency(
+        splitTextLinesIntoList(versions)
+      ).reduce((accumulator, currentValue) => {
+        const [k, v] = currentValue;
 
-          ["dependencies", "dev-dependencies"].forEach((section) => {
-            if (
-              k in accumulator.tool.poetry[section] &&
-              canUpdateDependency(accumulator.tool.poetry[section][k])
-            ) {
-              accumulator.tool.poetry[section][k] = `>=${v}`;
-            }
-          });
-          return accumulator;
-        }, pyProjectFileToml);
+        ["dependencies", "dev-dependencies"].forEach((section) => {
+          if (
+            k in accumulator.tool.poetry[section] &&
+            canUpdateDependency(accumulator.tool.poetry[section][k])
+          ) {
+            accumulator.tool.poetry[section][k] = `>=${v}`;
+          }
+        });
+        return accumulator;
+      }, pyProjectFileToml);
 
       return toml.stringify(newPyProjectFile).replaceAll("  ", "");
     }
