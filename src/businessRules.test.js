@@ -3,11 +3,13 @@ import {
   canUpdateDependency,
   discoveryDependencySpecification,
   getNameAndVersionOfEachDependency,
+  processDependency,
   removeEmptyString,
   splitTextLinesIntoList,
 } from "./businessRules";
 
-import { versionsData } from "./exampleData";
+import { pyProjectData, versionsData } from "./exampleData";
+import toml from "@iarna/toml";
 
 const each = require("jest-each").default;
 
@@ -106,5 +108,45 @@ describe("getNameAndVersionOfEachDependency Tests", () => {
   });
   test("List empty", () => {
     expect(getNameAndVersionOfEachDependency([])).toStrictEqual([]);
+  });
+});
+
+describe("processDependency Tests", () => {
+  const pyProjectFileToml = toml.parse(pyProjectData);
+  test("It should update requests at dependencies", () => {
+    const [dependency, section] = ["requests", "dependencies"];
+    const newPyProjectFileToml = processDependency(
+      dependency,
+      section,
+      "2.25.0",
+      pyProjectFileToml
+    );
+    expect(newPyProjectFileToml.tool.poetry[section][dependency]).toStrictEqual(
+      ">=2.25.0"
+    );
+  });
+  test("It shouldn't update requests at dev-dependencies", () => {
+    const [dependency, section] = ["requests", "dev-dependencies"];
+    const newPyProjectFileToml = processDependency(
+      dependency,
+      section,
+      "2.25.0",
+      pyProjectFileToml
+    );
+    expect(newPyProjectFileToml.tool.poetry[section][dependency]).toStrictEqual(
+      "^2.24.0"
+    );
+  });
+  test("Dependencies not exist", () => {
+    const [dependency, section] = ["requests-inex", "dev-dependencies"];
+    const newPyProjectFileToml = processDependency(
+      dependency,
+      section,
+      "2.25.0",
+      pyProjectFileToml
+    );
+    expect(
+      newPyProjectFileToml.tool.poetry[section][dependency]
+    ).toBeUndefined();
   });
 });
