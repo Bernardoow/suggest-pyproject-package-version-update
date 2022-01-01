@@ -44,3 +44,18 @@ export function getNameAndVersionOfEachDependency(stringList) {
     return value.replace(/\s+/g, " ").split(" ").slice(0, 2);
   });
 }
+
+export function processDependency(
+  dependency,
+  section,
+  version,
+  pyProjectFileToml
+) {
+  if (
+    dependency in pyProjectFileToml.tool.poetry[section] &&
+    canUpdateDependency(pyProjectFileToml.tool.poetry[section][dependency])
+  ) {
+    pyProjectFileToml.tool.poetry[section][dependency] = `>=${version}`;
+  }
+  return pyProjectFileToml;
+}

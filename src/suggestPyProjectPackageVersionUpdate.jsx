@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import toml from "@iarna/toml";
 import { pyProjectData, versionsData } from "./exampleData";
 import {
-  canUpdateDependency,
   getNameAndVersionOfEachDependency,
+  processDependency,
   splitTextLinesIntoList,
 } from "./businessRules";
 
@@ -26,16 +26,12 @@ const SuggestPyProjectPackageVersionUpdate = () => {
       const newPyProjectFile = getNameAndVersionOfEachDependency(
         splitTextLinesIntoList(versions)
       ).reduce((accumulator, currentValue) => {
-        const [k, v] = currentValue;
+        const [dependency, version] = currentValue;
 
         ["dependencies", "dev-dependencies"].forEach((section) => {
-          if (
-            k in accumulator.tool.poetry[section] &&
-            canUpdateDependency(accumulator.tool.poetry[section][k])
-          ) {
-            accumulator.tool.poetry[section][k] = `>=${v}`;
-          }
+          processDependency(dependency, section, version, accumulator);
         });
+
         return accumulator;
       }, pyProjectFileToml);
 

@@ -7,7 +7,7 @@ authors = ["Bernardo Gomes <bgomesdeabreu@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-requests = "^2.24.0"
+requests = ">=2.24.0"
 
 [tool.poetry.dev-dependencies]
 requests = "^2.24.0"
