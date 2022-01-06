@@ -15,33 +15,35 @@ const each = require("jest-each").default;
 
 describe("discoveryDependencySpecification Tests", () => {
   test("Caret requirements", () => {
-    expect(discoveryDependencySpecification("^2.24.0")).toStrictEqual(["^"]);
+    expect(discoveryDependencySpecification("^2.24.0")).toStrictEqual("^");
   });
 
   test("Tilde requirements", () => {
-    expect(discoveryDependencySpecification("~2.24.0")).toStrictEqual(["~"]);
+    expect(discoveryDependencySpecification("~2.24.0")).toStrictEqual("~");
   });
 
   describe("Inequality requirements", () => {
-    each([
-      [">=", [">="]],
-      [">", [">"]],
-      ["<", ["<"]],
-      ["<=", ["<="]],
-      ["!=", ["!="]],
-    ]).test("Inequality requirements", (inequality, expected) => {
-      expect(discoveryDependencySpecification(`${inequality}2.24.0`)).toEqual(
-        expected
-      );
-    });
+    each([">=", ">", "<", "<=", "!="]).test(
+      "Inequality requirements",
+      (inequality) => {
+        expect(discoveryDependencySpecification(`${inequality}2.24.0`)).toEqual(
+          inequality
+        );
+      }
+    );
   });
 });
 
 describe("canChangeDependencySpecification Tests", () => {
-  test("Acceptable update version", () => {
-    expect(canChangeDependencySpecification([">="])).toBeTruthy();
-  });
-  each([[">"], ["<"], ["<="], ["!="], [">=", "<"]]).test(
+  each([">=", "*"]).test(
+    "Acceptable update version",
+    (dependencyDiscovered) => {
+      expect(
+        canChangeDependencySpecification(dependencyDiscovered)
+      ).toBeTruthy();
+    }
+  );
+  each([">", "<", "<=", "!=", "<"]).test(
     "Not acceptable update version",
     (dependencyDiscovered) => {
       expect(
