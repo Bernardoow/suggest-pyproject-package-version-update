@@ -7,23 +7,21 @@ export function discoveryDependencySpecification(dependency) {
     ["!=", new RegExp("^!=\\w")],
     ["^", new RegExp("^\\^\\w")],
     ["~", new RegExp("^~\\w")],
+    ["*", new RegExp("^\\*")],
   ];
 
-  const dependencies = [];
+  let dependencies = [];
   for (let i = 0; i < regexList.length; i++) {
     const [dependencySpecification, regex] = regexList[i];
     if (regex.test(dependency)) {
       dependencies.push(dependencySpecification);
     }
   }
-  return dependencies;
+  return dependencies.join(", ");
 }
 
 export function canChangeDependencySpecification(dependencyDiscovered) {
-  return (
-    dependencyDiscovered.length === 1 &&
-    JSON.stringify(dependencyDiscovered) === JSON.stringify([">="])
-  );
+  return [">=", "*"].includes(dependencyDiscovered);
 }
 
 export function canUpdateDependency(dependency) {
@@ -57,5 +55,22 @@ export function processDependency(
   ) {
     pyProjectFileToml.tool.poetry[section][dependency] = `>=${version}`;
   }
+  return pyProjectFileToml;
+}
+
+export function processDependencyList(
+  pyProjectFileToml,
+  currentDependencyVersion
+) {
+  currentDependencyVersion.forEach(([dependency, version]) => {
+    processDependency(dependency, "dependencies", version, pyProjectFileToml);
+    processDependency(
+      dependency,
+      "dev-dependencies",
+      version,
+      pyProjectFileToml
+    );
+  });
+
   return pyProjectFileToml;
 }
