@@ -3,7 +3,7 @@ import toml from "@iarna/toml";
 import { pyProjectData, versionsData } from "./exampleData";
 import {
   getNameAndVersionOfEachDependency,
-  processDependency,
+  processDependencyList,
   splitTextLinesIntoList,
 } from "./businessRules";
 
@@ -23,17 +23,13 @@ const SuggestPyProjectPackageVersionUpdate = () => {
 
   useEffect(() => {
     function producePinnedVersions(pyProjectFileToml) {
-      const newPyProjectFile = getNameAndVersionOfEachDependency(
+      const versionsList = getNameAndVersionOfEachDependency(
         splitTextLinesIntoList(versions)
-      ).reduce((accumulator, currentValue) => {
-        const [dependency, version] = currentValue;
-
-        ["dependencies", "dev-dependencies"].forEach((section) => {
-          processDependency(dependency, section, version, accumulator);
-        });
-
-        return accumulator;
-      }, pyProjectFileToml);
+      );
+      const newPyProjectFile = processDependencyList(
+        pyProjectFileToml,
+        versionsList
+      );
 
       return toml.stringify(newPyProjectFile).replaceAll("  ", "");
     }

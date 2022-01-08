@@ -60,9 +60,9 @@ export function processDependency(
 
 export function processDependencyList(
   pyProjectFileToml,
-  currentDependencyVersion
+  currentDependenciesVersions
 ) {
-  currentDependencyVersion.forEach(([dependency, version]) => {
+  currentDependenciesVersions.forEach(([dependency, version]) => {
     processDependency(dependency, "dependencies", version, pyProjectFileToml);
     processDependency(
       dependency,
