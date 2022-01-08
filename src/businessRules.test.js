@@ -4,6 +4,7 @@ import {
   discoveryDependencySpecification,
   getNameAndVersionOfEachDependency,
   processDependency,
+  processDependencyList,
   removeEmptyString,
   splitTextLinesIntoList,
 } from "./businessRules";
@@ -70,6 +71,7 @@ describe("splitTextLinesIntoList Tests", () => {
       "idna  2.10      Internationalized Domain Names in Applications (IDNA)",
       "requests 2.25.1    Python HTTP for Humans.",
       "urllib3  1.25.11   HTTP library with thread-safe connection pooling, file post, and more.",
+      "pytest  6.2.5   pytest simple powerful testing with Python",
     ]);
   });
 
@@ -151,4 +153,50 @@ describe("processDependency Tests", () => {
       newPyProjectFileToml.tool.poetry[section][dependency]
     ).toBeUndefined();
   });
+});
+
+describe("processDependencyList Tests", () => {
+  const pyProjectFileToml = toml.parse(pyProjectData);
+  const versions = [
+    ["certifi", "2020.12.5"],
+    ["chardet", "3.0.4"],
+    ["idna", "2.10"],
+    ["requests", "2.25.1"],
+    ["urllib3", "1.25.11"],
+    ["pytest", "6.2.5"],
+  ];
+
+  each([
+    ["chardet", ">=3.0.4"],
+    ["urllib3", ">=1.25.11"],
+    ["certifi", "<2020.12.5"],
+    ["requests", ">=2.25.1"],
+  ]).test(
+    "It should update requests at dependencies",
+    (dependency, version) => {
+      const updatedPyProjectFileToml = processDependencyList(
+        pyProjectFileToml,
+        versions
+      );
+      expect(
+        updatedPyProjectFileToml.tool.poetry["dependencies"][dependency]
+      ).toStrictEqual(version);
+    }
+  );
+
+  each([
+    ["pytest", ">=6.2.5"],
+    ["requests", "^2.24.0"],
+  ]).test(
+    "It should update requests at dev-dependencies",
+    (dependency, version) => {
+      const updatedPyProjectFileToml = processDependencyList(
+        pyProjectFileToml,
+        versions
+      );
+      expect(
+        updatedPyProjectFileToml.tool.poetry["dev-dependencies"][dependency]
+      ).toStrictEqual(version);
+    }
+  );
 });
