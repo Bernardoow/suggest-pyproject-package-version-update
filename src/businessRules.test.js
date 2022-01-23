@@ -7,6 +7,7 @@ import {
   processDependencyList,
   removeEmptyString,
   splitTextLinesIntoList,
+  processPyProjectAndVersion,
 } from "./businessRules";
 
 import { pyProjectData, versionsData } from "./exampleData";
@@ -199,4 +200,32 @@ describe("processDependencyList Tests", () => {
       ).toStrictEqual(version);
     }
   );
+});
+
+describe("processDependencyList Tests", () => {
+  const pyProjectFileToml = toml.parse(pyProjectData);
+
+  test("It should be equal a dependencies", () => {
+    const result = processPyProjectAndVersion(pyProjectFileToml, versionsData);
+    const expectedDependencies = {
+      python: "^3.8",
+      requests: ">=2.25.1",
+      urllib3: ">=1.25.11",
+      chardet: ">=3.0.4",
+      certifi: "<2020.12.5",
+    };
+
+    expect(result.tool.poetry.dependencies).toMatchObject(expectedDependencies);
+  });
+
+  test("It should be equal a dev-dependencies", () => {
+    const result = processPyProjectAndVersion(pyProjectFileToml, versionsData);
+    const expectedDevDependencies = {
+      requests: "^2.24.0",
+      pytest: ">=6.2.5",
+    };
+    expect(result.tool.poetry["dev-dependencies"]).toMatchObject(
+      expectedDevDependencies
+    );
+  });
 });

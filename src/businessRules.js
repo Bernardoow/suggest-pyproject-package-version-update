@@ -74,3 +74,10 @@ export function processDependencyList(
 
   return pyProjectFileToml;
 }
+
+export function processPyProjectAndVersion(pyProjectFileToml, versions) {
+  const versionsList = getNameAndVersionOfEachDependency(
+    splitTextLinesIntoList(versions)
+  );
+  return processDependencyList(pyProjectFileToml, versionsList);
+}
