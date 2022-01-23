@@ -3,6 +3,7 @@ import toml from "@iarna/toml";
 import { pyProjectData, versionsData } from "./exampleData";
 import { processPyProjectAndVersion } from "./businessRules";
 import AlertBar from "./components/alertBar";
+import InputArea from "./components/inputArea";
 
 const SuggestPyProjectPackageVersionUpdate = () => {
   const [pyProjectFile, SetPyProjectFile] = useState(pyProjectData);
@@ -25,7 +26,7 @@ const SuggestPyProjectPackageVersionUpdate = () => {
         versions
       );
 
-      return toml.stringify(newPyProjectFile).replaceAll("  ", "");
+      return toml.stringify(newPyProjectFile).replace(/" {2}"/g, "");
     }
 
     try {
@@ -45,44 +46,29 @@ const SuggestPyProjectPackageVersionUpdate = () => {
           message="PyProject.toml with problem."
         />
         <div className="mb-3">
-          <label htmlFor="pyProjectToml" className="form-label">
-            PyProject.toml
-          </label>
-          <textarea
-            className="form-control"
-            id="pyProjectToml"
+          <InputArea
+            title="PyProject.toml"
             value={pyProjectFile}
             onChange={pyProjectFileHandleChange}
-            rows="20"
-          ></textarea>
+          />
         </div>
       </div>
       <div className="col">
         <div className="mb-3">
-          <label htmlFor="poetryShow" className="form-label">
-            poetry show
-          </label>
-          <textarea
-            className="form-control"
-            id="poetryShow"
+          <InputArea
+            title="poetry show"
             value={versions}
             onChange={versionsHandleChange}
-            rows="20"
-          ></textarea>
+          />
         </div>
       </div>
       <div className="col">
         <div className="mb-3">
-          <label htmlFor="result" className="form-label">
-            New PyProject.toml
-          </label>
-          <textarea
-            className="form-control"
-            id="dependencies"
+          <InputArea
+            title="New PyProject.toml"
             value={newPyProjectFile}
             readOnly
-            rows="30"
-          ></textarea>
+          />
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 {
   "name": "suggest-pyproject-package-version-update",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "private": true,
   "homepage": "https://bernardoow.github.io/suggest-pyproject-package-version-update/",
   "dependencies": {
@@ -11,6 +11,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.3",
+    "slugify": "^1.6.5",
     "web-vitals": "^1.1.1"
   },
   "scripts": {
