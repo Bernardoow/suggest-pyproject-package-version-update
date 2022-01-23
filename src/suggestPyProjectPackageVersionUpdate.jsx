@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import toml from "@iarna/toml";
 import { pyProjectData, versionsData } from "./exampleData";
 import { processPyProjectAndVersion } from "./businessRules";
+import AlertBar from "./components/alertBar";
 
 const SuggestPyProjectPackageVersionUpdate = () => {
   const [pyProjectFile, SetPyProjectFile] = useState(pyProjectData);
@@ -39,14 +40,10 @@ const SuggestPyProjectPackageVersionUpdate = () => {
   return (
     <div className="row">
       <div className="col">
-        {isPyProjectFileWithProblem ? (
-          <p className="alert alert-danger" role="alert">
-            PyProject.toml with problem.
-          </p>
-        ) : (
-          ""
-        )}
-
+        <AlertBar
+          isPyProjectFileWithProblem={isPyProjectFileWithProblem}
+          message="PyProject.toml with problem."
+        />
         <div className="mb-3">
           <label htmlFor="pyProjectToml" className="form-label">
             PyProject.toml
