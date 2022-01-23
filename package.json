@@ -1,6 +1,6 @@
 {
   "name": "suggest-pyproject-package-version-update",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "homepage": "https://bernardoow.github.io/suggest-pyproject-package-version-update/",
   "dependencies": {
