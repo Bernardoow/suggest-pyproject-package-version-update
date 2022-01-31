@@ -1,3 +1,5 @@
+import toml from "@iarna/toml";
+
 export function discoveryDependencySpecification(dependency) {
   const regexList = [
     [">=", new RegExp("^>=\\w")],
@@ -80,4 +82,20 @@ export function processPyProjectAndVersion(pyProjectFileToml, versions) {
     splitTextLinesIntoList(versions)
   );
   return processDependencyList(pyProjectFileToml, versionsList);
+}
+
+export function producePinnedVersions(pyProjectFile, versions) {
+  let pyProjectFileToml = undefined;
+  let newPyProjectFile = undefined;
+  try {
+    pyProjectFileToml = toml.parse(pyProjectFile);
+    newPyProjectFile = processPyProjectAndVersion(pyProjectFileToml, versions);
+  } catch (_) {
+    return { content: "", hasError: true };
+  }
+
+  return {
+    content: toml.stringify(newPyProjectFile).replace(/" {2}"/g, ""),
+    hasError: false,
+  };
 }
