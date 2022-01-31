@@ -8,6 +8,7 @@ import {
   removeEmptyString,
   splitTextLinesIntoList,
   processPyProjectAndVersion,
+  producePinnedVersions,
 } from "./businessRules";
 
 import { pyProjectData, versionsData } from "./exampleData";
@@ -227,5 +228,33 @@ describe("processDependencyList Tests", () => {
     expect(result.tool.poetry["dev-dependencies"]).toMatchObject(
       expectedDevDependencies
     );
+  });
+});
+
+describe("producePinnedVersions Tests", () => {
+  test("it should return empty content and hasError true when has error on toml.", () => {
+    const { content, hasError } = producePinnedVersions("test", "");
+    expect(hasError).toBe(true);
+    expect(content).toBe("");
+  });
+  test("it sho1uld return empty content and hasError true when has error on toml.", () => {
+    const pyProject = `[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+pytest = ">=6.0.0"
+`;
+    const expectedPyProject = `[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+pytest = ">=6.2.5"
+`;
+    const { content, hasError } = producePinnedVersions(
+      pyProject,
+      "pytest  6.2.5   pytest simple powerful testing with Python"
+    );
+    expect(hasError).toBe(false);
+    expect(content).toBe(expectedPyProject);
   });
 });

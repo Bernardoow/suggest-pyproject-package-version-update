@@ -55,7 +55,8 @@ describe("ColArea Component Tests", () => {
         container
       );
     });
-    const label = document.querySelector("p#test-title-alert");
-    expect(label).not.toBeNull();
+    const alert = document.querySelector("p#test-title-alert");
+    expect(alert).not.toBeNull();
+    expect(alert).toHaveTextContent(alertMessage);
   });
 });

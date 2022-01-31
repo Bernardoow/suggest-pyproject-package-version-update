@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import toml from "@iarna/toml";
 import { pyProjectData, versionsData } from "./exampleData";
-import { processPyProjectAndVersion } from "./businessRules";
+import { producePinnedVersions } from "./businessRules";
 import ColArea from "./components/colArea";
 
 const SuggestPyProjectPackageVersionUpdate = () => {
@@ -19,22 +18,12 @@ const SuggestPyProjectPackageVersionUpdate = () => {
   }
 
   useEffect(() => {
-    function producePinnedVersions(pyProjectFileToml) {
-      const newPyProjectFile = processPyProjectAndVersion(
-        pyProjectFileToml,
-        versions
-      );
-
-      return toml.stringify(newPyProjectFile).replace(/" {2}"/g, "");
-    }
-
-    try {
-      const pyProjectFileToml = toml.parse(pyProjectFile);
-      SetIsPyProjectFileWithProblem(false);
-      SetNewPyProjectFile(producePinnedVersions(pyProjectFileToml));
-    } catch (_) {
-      SetIsPyProjectFileWithProblem(true);
-    }
+    const { content, hasError } = producePinnedVersions(
+      pyProjectFile,
+      versions
+    );
+    SetIsPyProjectFileWithProblem(hasError);
+    SetNewPyProjectFile(content);
   }, [pyProjectFile, versions]);
 
   return (
@@ -44,7 +33,7 @@ const SuggestPyProjectPackageVersionUpdate = () => {
         value={pyProjectFile}
         onChange={pyProjectFileHandleChange}
         hasAlert={isPyProjectFileWithProblem}
-        message="PyProject.toml with problem."
+        alertMessage="PyProject.toml with problem."
       />
       <ColArea
         title="poetry show"
