@@ -22,17 +22,25 @@ describe("AlertBar Component Tests", () => {
     [true, "", ""],
   ]).test(
     "It should update requests at dev-dependencies",
-    (isPyProjectFileWithProblem, message, expected) => {
+    (hasAlert, message, expected) => {
       act(() => {
         render(
-          <AlertBar
-            isPyProjectFileWithProblem={isPyProjectFileWithProblem}
-            message={message}
-          />,
+          <AlertBar hasAlert={hasAlert} message={message} id="test-alert" />,
           container
         );
       });
       expect(container.textContent).toBe(expected);
     }
   );
+
+  test("it should has id", () => {
+    act(() => {
+      render(
+        <AlertBar hasAlert={true} message="test" id="test-alert" />,
+        container
+      );
+    });
+    const alert = document.querySelector("p#test-alert");
+    expect(alert).not.toBeNull();
+  });
 });

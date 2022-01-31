@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import toml from "@iarna/toml";
 import { pyProjectData, versionsData } from "./exampleData";
 import { processPyProjectAndVersion } from "./businessRules";
-import AlertBar from "./components/alertBar";
-import InputArea from "./components/inputArea";
+import ColArea from "./components/colArea";
 
 const SuggestPyProjectPackageVersionUpdate = () => {
   const [pyProjectFile, SetPyProjectFile] = useState(pyProjectData);
@@ -40,37 +39,23 @@ const SuggestPyProjectPackageVersionUpdate = () => {
 
   return (
     <div className="row">
-      <div className="col">
-        <AlertBar
-          isPyProjectFileWithProblem={isPyProjectFileWithProblem}
-          message="PyProject.toml with problem."
-        />
-        <div className="mb-3">
-          <InputArea
-            title="PyProject.toml"
-            value={pyProjectFile}
-            onChange={pyProjectFileHandleChange}
-          />
-        </div>
-      </div>
-      <div className="col">
-        <div className="mb-3">
-          <InputArea
-            title="poetry show"
-            value={versions}
-            onChange={versionsHandleChange}
-          />
-        </div>
-      </div>
-      <div className="col">
-        <div className="mb-3">
-          <InputArea
-            title="New PyProject.toml"
-            value={newPyProjectFile}
-            readOnly
-          />
-        </div>
-      </div>
+      <ColArea
+        title="PyProject.toml"
+        value={pyProjectFile}
+        onChange={pyProjectFileHandleChange}
+        hasAlert={isPyProjectFileWithProblem}
+        message="PyProject.toml with problem."
+      />
+      <ColArea
+        title="poetry show"
+        value={versions}
+        onChange={versionsHandleChange}
+      />
+      <ColArea
+        title="New PyProject.toml"
+        value={newPyProjectFile}
+        readOnly={true}
+      />
     </div>
   );
 };

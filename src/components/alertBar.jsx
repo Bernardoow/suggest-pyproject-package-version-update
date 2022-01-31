@@ -1,7 +1,7 @@
 export default function AlertBar(props) {
-  if (props.isPyProjectFileWithProblem) {
+  if (props.hasAlert || false) {
     return (
-      <p className="alert alert-danger" role="alert">
+      <p className="alert alert-danger" role="alert" id={props.id}>
         {props.message}
       </p>
     );
