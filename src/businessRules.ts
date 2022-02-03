@@ -1,7 +1,6 @@
 import toml from "@iarna/toml";
-
-export function discoveryDependencySpecification(dependency) {
-  const regexList = [
+export function discoveryDependencySpecification(dependency: string) : string{
+  const regexList: [string, RegExp][]  = [
     [">=", new RegExp("^>=\\w")],
     [">", new RegExp("^>\\w")],
     ["<=", new RegExp("^<=\\w")],
@@ -22,48 +21,51 @@ export function discoveryDependencySpecification(dependency) {
   return dependencies.join(", ");
 }
 
-export function canChangeDependencySpecification(dependencyDiscovered) {
+
+export function canChangeDependencySpecification(dependencyDiscovered: string) : boolean{
   return [">=", "*"].includes(dependencyDiscovered);
 }
 
-export function canUpdateDependency(dependency) {
+export function canUpdateDependency(dependency: string): boolean {
   const dependencies = discoveryDependencySpecification(dependency);
   return canChangeDependencySpecification(dependencies);
 }
 
-export function splitTextLinesIntoList(versions) {
+export function removeEmptyString(list: string[] ) : string[] {
+  return list.filter((value:string) => !!value);
+}
+
+export function splitTextLinesIntoList(versions: string): string [] {
   return removeEmptyString(versions.split("\n"));
 }
 
-export function removeEmptyString(stringList) {
-  return stringList.filter((value) => !!value);
-}
+export function getNameAndVersionOfEachDependency(versions:string []):string [][] {
 
-export function getNameAndVersionOfEachDependency(stringList) {
-  return stringList.map((value) => {
+  return versions.map((value:string) => {
     return value.replace(/\s+/g, " ").split(" ").slice(0, 2);
   });
 }
 
 export function processDependency(
-  dependency,
-  section,
-  version,
-  pyProjectFileToml
-) {
+  dependency: string,
+  section: string,
+  version: string,
+  pyProjectFileToml: any
+) :any{
   if (
     dependency in pyProjectFileToml.tool.poetry[section] &&
     canUpdateDependency(pyProjectFileToml.tool.poetry[section][dependency])
   ) {
     pyProjectFileToml.tool.poetry[section][dependency] = `>=${version}`;
   }
+
   return pyProjectFileToml;
 }
 
 export function processDependencyList(
-  pyProjectFileToml,
-  currentDependenciesVersions
-) {
+  pyProjectFileToml: any,
+  currentDependenciesVersions: string [][]
+):any {
   currentDependenciesVersions.forEach(([dependency, version]) => {
     processDependency(dependency, "dependencies", version, pyProjectFileToml);
     processDependency(
@@ -77,14 +79,14 @@ export function processDependencyList(
   return pyProjectFileToml;
 }
 
-export function processPyProjectAndVersion(pyProjectFileToml, versions) {
+export function processPyProjectAndVersion(pyProjectFileToml: any, versions:string): any {
   const versionsList = getNameAndVersionOfEachDependency(
     splitTextLinesIntoList(versions)
   );
   return processDependencyList(pyProjectFileToml, versionsList);
 }
 
-export function producePinnedVersions(pyProjectFile, versions) {
+export function producePinnedVersions(pyProjectFile: string, versions:string) {
   let pyProjectFileToml = undefined;
   let newPyProjectFile = undefined;
   try {

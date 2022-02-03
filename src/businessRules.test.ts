@@ -28,7 +28,7 @@ describe("discoveryDependencySpecification Tests", () => {
   describe("Inequality requirements", () => {
     each([">=", ">", "<", "<=", "!="]).test(
       "Inequality requirements",
-      (inequality) => {
+      (inequality: string) => {
         expect(discoveryDependencySpecification(`${inequality}2.24.0`)).toEqual(
           inequality
         );
@@ -40,7 +40,7 @@ describe("discoveryDependencySpecification Tests", () => {
 describe("canChangeDependencySpecification Tests", () => {
   each([">=", "*"]).test(
     "Acceptable update version",
-    (dependencyDiscovered) => {
+    (dependencyDiscovered : string) => {
       expect(
         canChangeDependencySpecification(dependencyDiscovered)
       ).toBeTruthy();
@@ -48,7 +48,7 @@ describe("canChangeDependencySpecification Tests", () => {
   );
   each([">", "<", "<=", "!=", "<"]).test(
     "Not acceptable update version",
-    (dependencyDiscovered) => {
+    (dependencyDiscovered: string) => {
       expect(
         canChangeDependencySpecification(dependencyDiscovered)
       ).toBeFalsy();
@@ -58,10 +58,22 @@ describe("canChangeDependencySpecification Tests", () => {
 
 describe("canUpdate Tests", () => {
   test("Acceptable", () => {
-    expect(canUpdateDependency([">=20.20.20"])).toBeTruthy();
+    expect(canUpdateDependency(">=20.20.20")).toBeTruthy();
   });
   test("Not acceptable", () => {
-    expect(canUpdateDependency(["^20.20.20"])).toBeFalsy();
+    expect(canUpdateDependency("^20.20.20")).toBeFalsy();
+  });
+});
+
+describe("removeEmptyString Tests", () => {
+  test("List without entry with value and empty string", () => {
+    expect(removeEmptyString(["1", "", "2"])).toStrictEqual(["1", "2"]);
+  });
+  test("List without entry with value and without empty string", () => {
+    expect(removeEmptyString(["1", "2"])).toStrictEqual(["1", "2"]);
+  });
+  test("Empty Data", () => {
+    expect(removeEmptyString([""])).toStrictEqual([]);
   });
 });
 
@@ -82,17 +94,6 @@ describe("splitTextLinesIntoList Tests", () => {
   });
 });
 
-describe("removeEmptyString Tests", () => {
-  test("List without entry with value and empty string", () => {
-    expect(removeEmptyString(["1", "", "2"])).toStrictEqual(["1", "2"]);
-  });
-  test("List without entry with value and without empty string", () => {
-    expect(removeEmptyString(["1", "2"])).toStrictEqual(["1", "2"]);
-  });
-  test("Empty Data", () => {
-    expect(removeEmptyString([""])).toStrictEqual([]);
-  });
-});
 
 describe("getNameAndVersionOfEachDependency Tests", () => {
   test("List valid", () => {
@@ -175,7 +176,7 @@ describe("processDependencyList Tests", () => {
     ["requests", ">=2.25.1"],
   ]).test(
     "It should update requests at dependencies",
-    (dependency, version) => {
+    (dependency: string, version:string) => {
       const updatedPyProjectFileToml = processDependencyList(
         pyProjectFileToml,
         versions
@@ -191,7 +192,7 @@ describe("processDependencyList Tests", () => {
     ["requests", "^2.24.0"],
   ]).test(
     "It should update requests at dev-dependencies",
-    (dependency, version) => {
+    (dependency:string, version:string) => {
       const updatedPyProjectFileToml = processDependencyList(
         pyProjectFileToml,
         versions
@@ -203,7 +204,8 @@ describe("processDependencyList Tests", () => {
   );
 });
 
-describe("processDependencyList Tests", () => {
+
+describe("processPyProjectAndVersion Tests", () => {
   const pyProjectFileToml = toml.parse(pyProjectData);
 
   test("It should be equal a dependencies", () => {
@@ -230,6 +232,7 @@ describe("processDependencyList Tests", () => {
     );
   });
 });
+
 
 describe("producePinnedVersions Tests", () => {
   test("it should return empty content and hasError true when has error on toml.", () => {
