@@ -3,3 +3,7 @@ export interface IDependencySpecificationRegex {
   readonly regex: RegExp;
 }
 
+export interface ICurrentDependencyInfo {
+  readonly dependency: string;
+  readonly version: string;
+}
