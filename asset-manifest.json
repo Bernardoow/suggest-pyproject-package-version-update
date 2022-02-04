@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.js": "/suggest-pyproject-package-version-update/static/js/main.c50d44fc.chunk.js",
-    "main.js.map": "/suggest-pyproject-package-version-update/static/js/main.c50d44fc.chunk.js.map",
+    "main.js": "/suggest-pyproject-package-version-update/static/js/main.15053777.chunk.js",
+    "main.js.map": "/suggest-pyproject-package-version-update/static/js/main.15053777.chunk.js.map",
     "runtime-main.js": "/suggest-pyproject-package-version-update/static/js/runtime-main.1c343e0d.js",
     "runtime-main.js.map": "/suggest-pyproject-package-version-update/static/js/runtime-main.1c343e0d.js.map",
-    "static/js/2.0c4b79a4.chunk.js": "/suggest-pyproject-package-version-update/static/js/2.0c4b79a4.chunk.js",
-    "static/js/2.0c4b79a4.chunk.js.map": "/suggest-pyproject-package-version-update/static/js/2.0c4b79a4.chunk.js.map",
+    "static/js/2.48c07cb5.chunk.js": "/suggest-pyproject-package-version-update/static/js/2.48c07cb5.chunk.js",
+    "static/js/2.48c07cb5.chunk.js.map": "/suggest-pyproject-package-version-update/static/js/2.48c07cb5.chunk.js.map",
     "static/js/3.65a6485e.chunk.js": "/suggest-pyproject-package-version-update/static/js/3.65a6485e.chunk.js",
     "static/js/3.65a6485e.chunk.js.map": "/suggest-pyproject-package-version-update/static/js/3.65a6485e.chunk.js.map",
     "index.html": "/suggest-pyproject-package-version-update/index.html",
-    "static/js/2.0c4b79a4.chunk.js.LICENSE.txt": "/suggest-pyproject-package-version-update/static/js/2.0c4b79a4.chunk.js.LICENSE.txt"
+    "static/js/2.48c07cb5.chunk.js.LICENSE.txt": "/suggest-pyproject-package-version-update/static/js/2.48c07cb5.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.1c343e0d.js",
-    "static/js/2.0c4b79a4.chunk.js",
-    "static/js/main.c50d44fc.chunk.js"
+    "static/js/2.48c07cb5.chunk.js",
+    "static/js/main.15053777.chunk.js"
   ]
 }
