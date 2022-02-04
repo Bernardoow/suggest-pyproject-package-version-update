@@ -11,6 +11,8 @@ import {
   producePinnedVersions,
 } from "./businessRules";
 
+import { ICurrentDependencyInfo } from "./models";
+
 import { pyProjectData, versionsData } from "./exampleData";
 import toml from "@iarna/toml";
 
@@ -28,7 +30,7 @@ describe("discoveryDependencySpecification Tests", () => {
   describe("Inequality requirements", () => {
     each([">=", ">", "<", "<=", "!="]).test(
       "Inequality requirements",
-      (inequality) => {
+      (inequality: string) => {
         expect(discoveryDependencySpecification(`${inequality}2.24.0`)).toEqual(
           inequality
         );
@@ -40,7 +42,7 @@ describe("discoveryDependencySpecification Tests", () => {
 describe("canChangeDependencySpecification Tests", () => {
   each([">=", "*"]).test(
     "Acceptable update version",
-    (dependencyDiscovered) => {
+    (dependencyDiscovered: string) => {
       expect(
         canChangeDependencySpecification(dependencyDiscovered)
       ).toBeTruthy();
@@ -48,7 +50,7 @@ describe("canChangeDependencySpecification Tests", () => {
   );
   each([">", "<", "<=", "!=", "<"]).test(
     "Not acceptable update version",
-    (dependencyDiscovered) => {
+    (dependencyDiscovered: string) => {
       expect(
         canChangeDependencySpecification(dependencyDiscovered)
       ).toBeFalsy();
@@ -58,10 +60,22 @@ describe("canChangeDependencySpecification Tests", () => {
 
 describe("canUpdate Tests", () => {
   test("Acceptable", () => {
-    expect(canUpdateDependency([">=20.20.20"])).toBeTruthy();
+    expect(canUpdateDependency(">=20.20.20")).toBeTruthy();
   });
   test("Not acceptable", () => {
-    expect(canUpdateDependency(["^20.20.20"])).toBeFalsy();
+    expect(canUpdateDependency("^20.20.20")).toBeFalsy();
+  });
+});
+
+describe("removeEmptyString Tests", () => {
+  test("List without entry with value and empty string", () => {
+    expect(removeEmptyString(["1", "", "2"])).toStrictEqual(["1", "2"]);
+  });
+  test("List without entry with value and without empty string", () => {
+    expect(removeEmptyString(["1", "2"])).toStrictEqual(["1", "2"]);
+  });
+  test("Empty Data", () => {
+    expect(removeEmptyString([""])).toStrictEqual([]);
   });
 });
 
@@ -82,18 +96,6 @@ describe("splitTextLinesIntoList Tests", () => {
   });
 });
 
-describe("removeEmptyString Tests", () => {
-  test("List without entry with value and empty string", () => {
-    expect(removeEmptyString(["1", "", "2"])).toStrictEqual(["1", "2"]);
-  });
-  test("List without entry with value and without empty string", () => {
-    expect(removeEmptyString(["1", "2"])).toStrictEqual(["1", "2"]);
-  });
-  test("Empty Data", () => {
-    expect(removeEmptyString([""])).toStrictEqual([]);
-  });
-});
-
 describe("getNameAndVersionOfEachDependency Tests", () => {
   test("List valid", () => {
     expect(
@@ -105,11 +107,11 @@ describe("getNameAndVersionOfEachDependency Tests", () => {
         "urllib3  1.25.11   HTTP library with thread-safe connection pooling, file post, and more.",
       ])
     ).toStrictEqual([
-      ["certifi", "2020.12.5"],
-      ["chardet", "3.0.4"],
-      ["idna", "2.10"],
-      ["requests", "2.25.1"],
-      ["urllib3", "1.25.11"],
+      { dependency: "certifi", version: "2020.12.5" },
+      { dependency: "chardet", version: "3.0.4" },
+      { dependency: "idna", version: "2.10" },
+      { dependency: "requests", version: "2.25.1" },
+      { dependency: "urllib3", version: "1.25.11" },
     ]);
   });
   test("List empty", () => {
@@ -160,12 +162,12 @@ describe("processDependency Tests", () => {
 describe("processDependencyList Tests", () => {
   const pyProjectFileToml = toml.parse(pyProjectData);
   const versions = [
-    ["certifi", "2020.12.5"],
-    ["chardet", "3.0.4"],
-    ["idna", "2.10"],
-    ["requests", "2.25.1"],
-    ["urllib3", "1.25.11"],
-    ["pytest", "6.2.5"],
+    { dependency: "certifi", version: "2020.12.5" },
+    { dependency: "chardet", version: "3.0.4" },
+    { dependency: "idna", version: "2.10" },
+    { dependency: "requests", version: "2.25.1" },
+    { dependency: "urllib3", version: "1.25.11" },
+    { dependency: "pytest", version: "6.2.5" },
   ];
 
   each([
@@ -175,11 +177,12 @@ describe("processDependencyList Tests", () => {
     ["requests", ">=2.25.1"],
   ]).test(
     "It should update requests at dependencies",
-    (dependency, version) => {
+    (dependency: string, version: string) => {
       const updatedPyProjectFileToml = processDependencyList(
         pyProjectFileToml,
         versions
       );
+
       expect(
         updatedPyProjectFileToml.tool.poetry["dependencies"][dependency]
       ).toStrictEqual(version);
@@ -191,7 +194,7 @@ describe("processDependencyList Tests", () => {
     ["requests", "^2.24.0"],
   ]).test(
     "It should update requests at dev-dependencies",
-    (dependency, version) => {
+    (dependency: string, version: string) => {
       const updatedPyProjectFileToml = processDependencyList(
         pyProjectFileToml,
         versions
@@ -203,7 +206,7 @@ describe("processDependencyList Tests", () => {
   );
 });
 
-describe("processDependencyList Tests", () => {
+describe("processPyProjectAndVersion Tests", () => {
   const pyProjectFileToml = toml.parse(pyProjectData);
 
   test("It should be equal a dependencies", () => {
