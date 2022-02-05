@@ -27,7 +27,7 @@
         "predeploy": "npm run build",
         "deploy": "gh-pages -d build",
         "lint": "eslint src --color",
-        "prettier": "prettier src -c",
+        "prettier": "prettier src -w",
         "prepare": "is-ci || husky install"
     },
     "eslintConfig": {

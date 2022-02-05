@@ -1,8 +1,19 @@
+import * as React from "react";
+
 import AlertBar from "./alertBar";
 import InputArea from "./inputArea";
 import slugify from "slugify";
 
-export default function ColArea(props) {
+interface Props {
+    hasAlert?: boolean ;
+    alertMessage?: string;
+    title: string;
+    value: string;
+    onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+    readOnly?: boolean;
+}
+
+const ColArea: React.FunctionComponent<Props> = props => {
     const alertId =
         slugify(props.title || "", {
             lower: true,
@@ -25,4 +36,6 @@ export default function ColArea(props) {
             </div>
         </div>
     );
-}
+};
+
+export default ColArea;
