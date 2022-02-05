@@ -5,7 +5,7 @@ import InputArea from "./inputArea";
 import slugify from "slugify";
 
 interface Props {
-    hasAlert?: boolean ;
+    hasAlert?: boolean;
     alertMessage?: string;
     title: string;
     value: string;
